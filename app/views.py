@@ -40,7 +40,7 @@ def insert_webpage(request):
     else:
         return HttpResponse('given topic is Not  present in my parent table')
 
-def insert_access(request):
+'''def insert_access(request):
     tn=input('enter topic')
     TO=Topic.objects.get_or_create(topic_name=tn)[0]
     TO.save()
@@ -53,5 +53,37 @@ def insert_access(request):
     i=input('enter ipl')
     AO=AccessRecord.objects.get_or_create(date=d,author=a,ipl=i,name=WO)[0]
     AO.save()
-    return HttpResponse('access created')
+    return HttpResponse('access created')'''
 
+def insert_access(request):
+    
+    n=input('enter name')
+    d=input('enter date')
+    a=input('enter author')
+    i=input('enter ipl')
+
+    LTO=webpage.objects.filter(name=n)
+    if LTO:
+        RTO=LTO[0]
+        AO=AccessRecord.objects.get_or_create(date=d,author=a,ipl=i,name=WO)[0]
+        AO.save()
+        return HttpResponse('access created')
+    else:
+        return HttpResponse('given topic is not present')
+
+
+
+def display_topic(request):
+    QLTO=Topic.objects.all()
+    d={'QLTO':QLTO}
+    return render(request,'display_topic.html',d)
+
+def display_webpage(request):
+    QLWO=webpage.objects.all()
+    d={'QLWO':QLWO}
+    return render(request,'display_webpage.html',d)
+
+def display_access(request):
+    QLAO=AccessRecord.objects.all()
+    d={'QLAO':QLAO}
+    return render(request,'display_access.html',d)

@@ -3,12 +3,14 @@ from django.shortcuts import render
 # Create your views here.
 from django.http import HttpResponse
 from app.models import *
+from django.db.models.functions import  Length
 
 def insert_topic(request):
     tn=input()
+    d={'QLTO':Topic.objects.all()}
     TO=Topic.objects.get_or_create(topic_name=tn)[0]
     TO.save()
-    return HttpResponse('Topic is created successfully')
+    return render(request,'display_topic.html',d)
 
 '''
 def insert_webpage(request):
@@ -32,11 +34,12 @@ def insert_webpage(request):
     #TO=Topic.objects.get_or_create(topic_name=tn)
     ''' we can use get method to get the parent table object but if parent table object is not avaia;able it throws an error'''
     LTO=Topic.objects.filter(topic_name=tn)
+    d={'QLWO':webpage.objects.all()}
     if LTO:
        RTO=LTO[0]
        WO=webpage.objects.get_or_create(name=n,url=u,topic_name=RTO)[0]
        WO.save()
-       return HttpResponse('webpage is created successfully')
+       return render(request,'display_webpage.html',d)
     else:
         return HttpResponse('given topic is Not  present in my parent table')
 
@@ -57,19 +60,13 @@ def insert_webpage(request):
 
 def insert_access(request):
     
-    n=input('enter name')
+    i=int(input('enter id'))
+    WO=webpage.objects.get(id=i)
     d=input('enter date')
     a=input('enter author')
-    i=input('enter ipl')
-
-    LTO=webpage.objects.filter(name=n)
-    if LTO:
-        RTO=LTO[0]
-        AO=AccessRecord.objects.get_or_create(date=d,author=a,ipl=i,name=WO)[0]
-        AO.save()
-        return HttpResponse('access created')
-    else:
-        return HttpResponse('given topic is not present')
+    AO=AccessRecord.objects.get_or_create(name=WO,date=d,author=a)
+    d={'QLAO':AccessRecord.objects.all()}
+    return render (request,'display_access.html',d)
 
 
 
@@ -80,6 +77,15 @@ def display_topic(request):
 
 def display_webpage(request):
     QLWO=webpage.objects.all()
+    QLWO=webpage.objects.filter(topic_name='cricket')
+    QLWO=webpage.objects.all()
+    QLWO=webpage.objects.exclude(topic_name='cricket')
+    QLWO=webpage.objects.all().order_by('name')
+    QLWO=webpage.objects.all().order_by('-name')
+    QLWO=webpage.objects.filter(topic_name='cricket').order_by('name')
+    QLWO=webpage.objects.all().order_by(Length('name').desc())
+    QLWO=webpage.objects.all()[2::]
+    
     d={'QLWO':QLWO}
     return render(request,'display_webpage.html',d)
 
@@ -87,3 +93,4 @@ def display_access(request):
     QLAO=AccessRecord.objects.all()
     d={'QLAO':QLAO}
     return render(request,'display_access.html',d)
+

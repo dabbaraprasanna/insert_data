@@ -84,13 +84,32 @@ def display_webpage(request):
     QLWO=webpage.objects.all().order_by('-name')
     QLWO=webpage.objects.filter(topic_name='cricket').order_by('name')
     QLWO=webpage.objects.all().order_by(Length('name').desc())
-    QLWO=webpage.objects.all()[2::]
+    QLWO=webpage.objects.all()[2::] 
+    QLWO=webpage.objects.all()
+    QLWO=webpage.objects.filter(name__startswith='s')
+    QLWO=webpage.objects.filter(name__endswith='i')
+    QLWO=webpage.objects.filter(name__contains='s')
+    QLWO=webpage.objects.all()
+    QLWO=webpage.objects.filter(name__in=('lakshmi','kohli'))
+    QLWO=webpage.objects.filter(name__in=('sania','Sachin'))
+    QLWO=webpage.objects.filter(url__endswith='in')
+    QLWO=webpage.objects.filter(name__endswith='.com')
+
+
     
     d={'QLWO':QLWO}
     return render(request,'display_webpage.html',d)
 
 def display_access(request):
     QLAO=AccessRecord.objects.all()
+    QLAO=AccessRecord.objects.filter(date='2000-3-5')
+    QLAO=AccessRecord.objects.all()
+    QLAO=AccessRecord.objects.filter(date__year=1999)
+    QLAO=AccessRecord.objects.all()
+    QLAO=AccessRecord.objects.filter(date__month=4)
+    QLAO=AccessRecord.objects.filter(date__day=4)
+
     d={'QLAO':QLAO}
     return render(request,'display_access.html',d)
+
 
